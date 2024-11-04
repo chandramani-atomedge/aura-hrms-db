@@ -3,9 +3,8 @@ env:
   variables:
     AWS_DEFAULT_REGION: "us-east-1"
     AWS_ACCOUNT_ID: "270514764245"
-    DOCKER_PASSWORD: "Myfirstpwd@2024"
-    DOCKER_USERNAME: "harishatomedgesoft"
-    ECR_REGISTRY: "270514764245.dkr.ecr.us-east-1.amazonaws.com/aura-postgres:test-devops"
+    TAG: "test-new"
+    ECR_REGISTRY: "270514764245.dkr.ecr.us-east-1.amazonaws.com/aura-postgres"
 phases:
   install:
     commands:
@@ -17,8 +16,6 @@ phases:
       - aws --version
   pre_build:
     commands:
-      - echo Logging in to Docker Hub...
-      - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
       - echo "Logging in to Amazon ECR"
       - echo "$AWS_DEFAULT_REGION"
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | sudo docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com
@@ -26,11 +23,11 @@ phases:
     commands:
       - echo "Building the Docker image"
       - docker build -t aura-postgres .
-      - docker tag aura-postgres $ECR_REGISTRY
+      - docker tag aura-postgres:latest $ECR_REGISTRY:$TAG
   post_build:
     commands:
       - echo "Pushing the Docker image"
-      - docker push $ECR_REGISTRY
+      - docker push $ECR_REGISTRY:$TAG
 artifacts:
   files:
     - '**/*'
