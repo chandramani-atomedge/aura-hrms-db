@@ -3,7 +3,6 @@ env:
   variables:
     AWS_DEFAULT_REGION: "us-east-1"
     AWS_ACCOUNT_ID: "270514764245"
-    TAG: "test-new"
     ECR_REGISTRY: "270514764245.dkr.ecr.us-east-1.amazonaws.com/aura-postgres"
 phases:
   install:
